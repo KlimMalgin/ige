@@ -171,7 +171,7 @@ var IgeEntityBox2d = IgeEntity.extend({
 					break;
 			}
 		} else {
-			IgeEntity.prototype.on.apply(this, arguments);
+			return IgeEntity.prototype.on.apply(this, arguments);
 		}
 	},
 	
@@ -179,7 +179,7 @@ var IgeEntityBox2d = IgeEntity.extend({
 		if (arguments.length === 3) {
 			
 		} else {
-			IgeEntity.prototype.off.apply(this, arguments);
+			return IgeEntity.prototype.off.apply(this, arguments);
 		}
 	},
 	
