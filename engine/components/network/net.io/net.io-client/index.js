@@ -172,13 +172,15 @@ NetIo.Client = NetIo.EventingClass.extend({
 	},
 
 	_encode: function (data) {
-		console.log('CLIENT::_encode: ', data);
-		return NetIo._compressor.compress(JSON.stringify(data));
+		// console.log('CLIENT::_encode: ', data);
+		// return NetIo._compressor.compress(JSON.stringify(data));
+		return JSON.stringify(data);
 	},
 
 	_decode: function (data) {
-		var decomp = NetIo._compressor.decompress(data);
-		console.log('CLIENT::_decode: ', data, '\n', decomp);
-		return decomp;
+		// var decomp = NetIo._compressor.decompress(data);
+		// console.log('CLIENT::_decode: ', data, '\n', decomp);
+		// return decomp;
+		return JSON.parse(data);
 	}
 });

@@ -17,7 +17,7 @@
 		"node-arguments": "0.0.1",
 		"socket.io": "0.9.14",
 		"uglify-js2": "2.1.4",
-		"net.io-server": "https://github.com/KlimMalgin/net.io-server/tarball/master"
+		"net.io-server": "git://github.com/KlimMalgin/net.io-server.git#v1.0.0"
 	},
 	"engines": {
 		"node": ">=0.8.3"
