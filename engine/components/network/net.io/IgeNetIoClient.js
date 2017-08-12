@@ -16,7 +16,7 @@ var IgeNetIoClient = {
 	id: function () {
 		return this._id || '';
 	},
-	
+
 	/**
 	 * Starts the network for the client.
 	 * @param {*} url The game server URL.
@@ -156,7 +156,8 @@ var IgeNetIoClient = {
 				console.log('Sending "' + commandName + '" (index ' + commandIndex + ') with data:', data);
 				this._debugCounter++;
 			}
-			ciEncoded = String.fromCharCode(commandIndex);
+			// ciEncoded = String.fromCharCode(commandIndex);
+			ciEncoded = commandIndex;
 			this._io.send([ciEncoded, data]);
 		} else {
 			this.log('Cannot send network packet with command "' + commandName + '" because the command has not been defined!', 'error');
@@ -252,7 +253,7 @@ var IgeNetIoClient = {
 	_onResponse: function (data) {
 		var id,
 			req;
-		
+
 		// The message is a network response
 		// to a request we sent earlier
 		id = data.id;
@@ -290,7 +291,9 @@ var IgeNetIoClient = {
 	 * @private
 	 */
 	_onMessageFromServer: function (data) {
-		var ciDecoded = data[0].charCodeAt(0),
+		//debugger;
+		// var ciDecoded = data[0].charCodeAt(0),
+		var ciDecoded = data[0],
 			commandName = this._networkCommandsIndex[ciDecoded];
 
 		if (this._networkCommands[commandName]) {

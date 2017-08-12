@@ -63,7 +63,7 @@ var IgeNetIoServer = {
 
 	/**
 	 * Adds a client to a room by id. All clients are added to room id
-	 * "ige" by default when they connect to the server. 
+	 * "ige" by default when they connect to the server.
 	 * @param {String} clientId The id of the client to add to the room.
 	 * @param {String} roomId The id of the room to add the client to.
 	 * @returns {*}
@@ -73,25 +73,25 @@ var IgeNetIoServer = {
 			if (roomId !== undefined) {
 				this._clientRooms[clientId] = this._clientRooms[clientId] || [];
 				this._clientRooms[clientId].push(roomId);
-				
+
 				this._socketsByRoomId[roomId] = this._socketsByRoomId[roomId] || {};
 				this._socketsByRoomId[roomId][clientId] = this._socketById[clientId];
-				
+
 				if (this.debug()) {
 					this.log('Client ' + clientId + ' joined room ' + roomId);
 				}
-				
+
 				return this._entity;
 			}
-			
+
 			this.log('Cannot add client to room because no roomId was provided!', 'warning');
 			return this._entity;
 		}
-		
+
 		this.log('Cannot add client to room because no clientId was provided!', 'warning');
 		return this._entity;
 	},
-	
+
 	/**
 	 * Removes a client from a room by id. All clients are added to room id
 	 * "ige" by default when they connect to the server and you can remove
@@ -107,14 +107,14 @@ var IgeNetIoServer = {
 					this._clientRooms[clientId].pull(roomId);
 					delete this._socketsByRoomId[roomId][clientId];
 				}
-				
+
 				return this._entity;
 			}
-			
+
 			this.log('Cannot remove client from room because no roomId was provided!', 'warning');
 			return this._entity;
 		}
-		
+
 		this.log('Cannot remove client from room because no clientId was provided!', 'warning');
 		return this._entity;
 	},
@@ -128,15 +128,15 @@ var IgeNetIoServer = {
 		if (clientId !== undefined) {
 			var arr = this._clientRooms[clientId],
 				arrCount = arr.length;
-			
+
 			while (arrCount--) {
 				this.clientLeaveRoom(clientId, arr[arrCount]);
 			}
-			
+
 			delete this._clientRooms[clientId];
 			return this._entity;
 		}
-		
+
 		this.log('Cannot remove client from room because no clientId was provided!', 'warning');
 		return this._entity;
 	},
@@ -150,11 +150,11 @@ var IgeNetIoServer = {
 		if (clientId !== undefined) {
 			return this._clientRooms[clientId] || [];
 		}
-		
+
 		this.log('Cannot get/set the clientRoom id because no clientId was provided!', 'warning');
 		return [];
 	},
-	
+
 	/**
 	 * Returns an associative array of all connected clients
 	 * by their ID.
@@ -166,7 +166,7 @@ var IgeNetIoServer = {
 		if (roomId !== undefined) {
 			return this._socketsByRoomId[roomId];
 		}
-		
+
 		return this._socketById;
 	},
 
@@ -212,7 +212,8 @@ var IgeNetIoServer = {
 			ciEncoded;
 
 		if (commandIndex !== undefined) {
-			ciEncoded = String.fromCharCode(commandIndex);
+			// ciEncoded = String.fromCharCode(commandIndex);
+			ciEncoded = commandIndex;
 			this._io.send([ciEncoded, data], clientId);
 		} else {
 			this.log('Cannot send network packet with command "' + commandName + '" because the command has not been defined!', 'error');
@@ -315,7 +316,7 @@ var IgeNetIoServer = {
 			if (!this.emit('connect', socket)) {
 				this.log('Accepted connection with id ' + socket.id);
 				this._socketById[socket.id] = socket;
-				
+
 				// Store a rooms array for this client
 				this._clientRooms[socket.id] = this._clientRooms[socket.id] || [];
 
@@ -354,7 +355,8 @@ var IgeNetIoServer = {
 	 * @private
 	 */
 	_onClientMessage: function (data, clientId) {
-		var ciDecoded = data[0].charCodeAt(0),
+		// var ciDecoded = data[0].charCodeAt(0),
+		var ciDecoded = data[0],
 			commandName = this._networkCommandsIndex[ciDecoded];
 
 		if (this._networkCommands[commandName]) {
@@ -363,7 +365,7 @@ var IgeNetIoServer = {
 
 		this.emit(commandName, [data[1], clientId]);
 	},
-	
+
 	_onRequest: function (data, clientId) {
 		// The message is a network request so fire
 		// the command event with the request id and
@@ -416,7 +418,7 @@ var IgeNetIoServer = {
 	_onClientDisconnect: function (data, socket) {
 		this.log('Client disconnected with id ' + socket.id);
 		this.emit('disconnect', socket.id);
-		
+
 		// Remove them from all rooms
 		this.clientLeaveAllRooms(socket.id);
 
